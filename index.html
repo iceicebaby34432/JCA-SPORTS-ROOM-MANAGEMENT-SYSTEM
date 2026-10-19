@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Sports Room – Equipment Borrowing System</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+  <!-- ========== LOGIN SCREEN ========== -->
+  <div id="screen-login" class="screen active">
+    <div class="phone-frame">
+      <div class="status-bar">
+        <span class="time" id="status-time">10:30</span>
+        <div class="status-icons">
+          <button class="btn-settings" id="btn-open-config" title="Settings / Google Sheets">
+            <i class="fas fa-cog"></i>
+          </button>
+          <i class="fas fa-signal"></i>
+          <i class="fas fa-wifi"></i>
+          <i class="fas fa-battery-full"></i>
+        </div>
+      </div>
+      <div class="login-content">
+        <div class="logo-area">
+          <div class="logo-circle">
+            <i class="fas fa-shield-alt"></i>
+            <i class="fas fa-futbol logo-ball"></i>
+          </div>
+          <h1>Sports Room</h1>
+          <p class="subtitle">Equipment Borrowing System</p>
+        </div>
+        <h2 class="welcome">Welcome Back</h2>
+        <p class="welcome-sub">Login to access the Sports Room</p>
+        <form id="form-login" class="form">
+          <label>Username / Student ID</label>
+          <div class="input-group">
+            <i class="fas fa-user"></i>
+            <input type="text" id="login-username" placeholder="Enter your username or Student ID" required />
+          </div>
+          <label>Password</label>
+          <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="login-password" placeholder="Enter your password" required />
+          </div>
+          <a href="#" class="forgot" id="btn-forgot">Forgot Password?</a>
+          <button type="submit" class="btn btn-primary btn-block">
+            <i class="fas fa-sign-in-alt"></i> Login
+          </button>
+        </form>
+        <p class="switch-link">Don't have an account? <a href="#" id="go-register">Register</a></p>
+        <button type="button" class="btn-config-link" id="btn-open-config-2">
+          <i class="fas fa-database"></i> Connect Google Sheets / Settings
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== REGISTER SCREEN ========== -->
+  <div id="screen-register" class="screen">
+    <div class="phone-frame">
+      <div class="status-bar">
+        <span class="time">10:30</span>
+        <div class="status-icons">
+          <i class="fas fa-signal"></i>
+          <i class="fas fa-wifi"></i>
+          <i class="fas fa-battery-full"></i>
+        </div>
+      </div>
+      <div class="login-content">
+        <div class="logo-area small">
+          <div class="logo-circle small">
+            <i class="fas fa-user-plus"></i>
+          </div>
+          <h1>Create Account</h1>
+          <p class="subtitle">Join the Sports Room Equipment Borrowing System</p>
+        </div>
+        <form id="form-register" class="form">
+          <label>Full Name</label>
+          <div class="input-group">
+            <i class="fas fa-id-card"></i>
+            <input type="text" id="reg-fullname" placeholder="Enter your full name" required />
+          </div>
+          <label>Username / Student ID</label>
+          <div class="input-group">
+            <i class="fas fa-user"></i>
+            <input type="text" id="reg-username" placeholder="Choose a username or Student ID" required />
+          </div>
+          <label>Password</label>
+          <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="reg-password" placeholder="Create a password" required minlength="4" />
+          </div>
+          <label>Confirm Password</label>
+          <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="reg-confirm" placeholder="Confirm your password" required />
+          </div>
+          <label>Role</label>
+          <div class="role-toggle">
+            <button type="button" class="role-btn active" data-role="borrower">
+              <i class="fas fa-user-graduate"></i> Borrower
+            </button>
+            <button type="button" class="role-btn" data-role="admin">
+              <i class="fas fa-user-shield"></i> Staff / Admin
+            </button>
+          </div>
+          <input type="hidden" id="reg-role" value="borrower" />
+          <button type="submit" class="btn btn-primary btn-block">
+            <i class="fas fa-user-plus"></i> Register
+          </button>
+        </form>
+        <p class="switch-link">Already have an account? <a href="#" id="go-login">Login</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== STUDENT DASHBOARD ========== -->
+  <div id="screen-student" class="screen">
+    <div class="app-container">
+      <header class="app-header">
+        <div class="header-left">
+          <div class="avatar"><i class="fas fa-user"></i></div>
+          <div>
+            <h2 id="student-greeting">Hello!</h2>
+            <p class="header-sub">Welcome back to the Sports Room</p>
+          </div>
+        </div>
+        <button class="btn-icon" id="student-logout" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+      </header>
+
+      <div class="stats-row">
+        <div class="stat-card blue">
+          <div class="stat-icon"><i class="fas fa-box-open"></i></div>
+          <div class="stat-info">
+            <span class="stat-num" id="stat-available">0</span>
+            <span class="stat-label">Available</span>
+          </div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-icon"><i class="fas fa-hand-holding"></i></div>
+          <div class="stat-info">
+            <span class="stat-num" id="stat-active">0</span>
+            <span class="stat-label">My Active</span>
+          </div>
+        </div>
+        <div class="stat-card orange">
+          <div class="stat-icon"><i class="fas fa-exclamation-triangle"></i></div>
+          <div class="stat-info">
+            <span class="stat-num" id="stat-overdue">0</span>
+            <span class="stat-label">Overdue</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="quick-actions">
+        <button class="action-card" id="btn-browse">
+          <div class="action-icon blue"><i class="fas fa-search"></i></div>
+          <div>
+            <h3>Browse Equipment</h3>
+            <p>Find and borrow sports gear available</p>
+          </div>
+          <i class="fas fa-chevron-right"></i>
+        </button>
+        <button class="action-card" id="btn-my-loans">
+          <div class="action-icon teal"><i class="fas fa-clipboard-list"></i></div>
+          <div>
+            <h3>My Loans</h3>
+            <p>View your loan history and details</p>
+          </div>
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+
+      <div class="section">
+        <h3 class="section-title">Recent Activity</h3>
+        <div id="student-recent" class="list-cards"></div>
+      </div>
+
+      <nav class="bottom-nav">
+        <button class="nav-item active" data-view="home"><i class="fas fa-home"></i><span>Home</span></button>
+        <button class="nav-item" data-view="browse"><i class="fas fa-search"></i><span>Browse</span></button>
+        <button class="nav-item" data-view="loans"><i class="fas fa-clipboard-list"></i><span>Loans</span></button>
+        <button class="nav-item" data-view="history"><i class="fas fa-history"></i><span>History</span></button>
+      </nav>
+    </div>
+  </div>
+
+  <!-- ========== BROWSE EQUIPMENT (Student) ========== -->
+  <div id="screen-browse" class="screen">
+    <div class="app-container">
+      <header class="app-header simple">
+        <button class="btn-icon back" id="browse-back"><i class="fas fa-arrow-left"></i></button>
+        <h2>Browse Equipment</h2>
+        <div style="width:40px"></div>
+      </header>
+      <div class="search-bar">
+        <i class="fas fa-search"></i>
+        <input type="text" id="search-equipment" placeholder="Search equipment..." />
+      </div>
+      <div class="filter-chips">
+        <button class="chip active" data-filter="all">All</button>
+        <button class="chip" data-filter="available">Available</button>
+        <button class="chip" data-filter="borrowed">Borrowed</button>
+        <button class="chip" data-filter="overdue">Overdue</button>
+      </div>
+      <div id="equipment-list" class="list-cards"></div>
+      <nav class="bottom-nav">
+        <button class="nav-item" data-view="home"><i class="fas fa-home"></i><span>Home</span></button>
+        <button class="nav-item active" data-view="browse"><i class="fas fa-search"></i><span>Browse</span></button>
+        <button class="nav-item" data-view="loans"><i class="fas fa-clipboard-list"></i><span>Loans</span></button>
+        <button class="nav-item" data-view="history"><i class="fas fa-history"></i><span>History</span></button>
+      </nav>
+    </div>
+  </div>
+
+  <!-- ========== MY LOANS (Student) ========== -->
+  <div id="screen-loans" class="screen">
+    <div class="app-container">
+      <header class="app-header simple">
+        <button class="btn-icon back" id="loans-back"><i class="fas fa-arrow-left"></i></button>
+        <h2>My Loans</h2>
+        <div style="width:40px"></div>
+      </header>
+      <div class="tabs">
+        <button class="tab active" data-tab="active">Active</button>
+        <button class="tab" data-tab="overdue">Overdue</button>
+        <button class="tab" data-tab="returned">Returned</button>
+      </div>
+      <div id="loans-list" class="list-cards"></div>
+      <nav class="bottom-nav">
+        <button class="nav-item" data-view="home"><i class="fas fa-home"></i><span>Home</span></button>
+        <button class="nav-item" data-view="browse"><i class="fas fa-search"></i><span>Browse</span></button>
+        <button class="nav-item active" data-view="loans"><i class="fas fa-clipboard-list"></i><span>Loans</span></button>
+        <button class="nav-item" data-view="history"><i class="fas fa-history"></i><span>History</span></button>
+      </nav>
+    </div>
+  </div>
+
+  <!-- ========== HISTORY (Student) ========== -->
+  <div id="screen-history" class="screen">
+    <div class="app-container">
+      <header class="app-header simple">
+        <button class="btn-icon back" id="history-back"><i class="fas fa-arrow-left"></i></button>
+        <h2>Full History</h2>
+        <div style="width:40px"></div>
+      </header>
+      <div id="history-list" class="list-cards"></div>
+      <nav class="bottom-nav">
+        <button class="nav-item" data-view="home"><i class="fas fa-home"></i><span>Home</span></button>
+        <button class="nav-item" data-view="browse"><i class="fas fa-search"></i><span>Browse</span></button>
+        <button class="nav-item" data-view="loans"><i class="fas fa-clipboard-list"></i><span>Loans</span></button>
+        <button class="nav-item active" data-view="history"><i class="fas fa-history"></i><span>History</span></button>
+      </nav>
+    </div>
+  </div>
+
+  <!-- ========== ADMIN DASHBOARD ========== -->
+  <div id="screen-admin" class="screen">
+    <div class="app-container">
+      <header class="app-header admin">
+        <div class="header-left">
+          <div class="avatar admin"><i class="fas fa-user-shield"></i></div>
+          <div>
+            <h2>Admin Dashboard</h2>
+            <p class="header-sub" id="admin-name">Staff Panel</p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button class="btn-icon" id="admin-open-config" title="Settings / Google Sheets"><i class="fas fa-cog"></i></button>
+          <button class="btn-icon" id="admin-logout" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+        </div>
+      </header>
+
+      <div class="section-label">QUICK STATS</div>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-box-icon blue"><i class="fas fa-boxes"></i></div>
+          <span class="stat-box-num" id="admin-total">0</span>
+          <span class="stat-box-label">Total Equipment</span>
+        </div>
+        <div class="stat-box">
+          <div class="stat-box-icon green"><i class="fas fa-hand-holding"></i></div>
+          <span class="stat-box-num" id="admin-borrowed">0</span>
+          <span class="stat-box-label">Currently Borrowed</span>
+        </div>
+        <div class="stat-box">
+          <div class="stat-box-icon orange"><i class="fas fa-exclamation-circle"></i></div>
+          <span class="stat-box-num" id="admin-overdue">0</span>
+          <span class="stat-box-label">Overdue Items</span>
+        </div>
+        <div class="stat-box">
+          <div class="stat-box-icon purple"><i class="fas fa-users"></i></div>
+          <span class="stat-box-num" id="admin-users">0</span>
+          <span class="stat-box-label">Active Users</span>
+        </div>
+      </div>
+
+      <div class="section-label">FEATURES</div>
+      <div class="features-grid">
+        <button class="feature-card" id="admin-manage">
+          <div class="feature-icon blue"><i class="fas fa-cogs"></i></div>
+          <h3>Manage Equipment</h3>
+          <p>Add, edit or remove sports gear and inventory</p>
+        </button>
+        <button class="feature-card" id="admin-loans">
+          <div class="feature-icon green"><i class="fas fa-clipboard-check"></i></div>
+          <h3>View Active Loans</h3>
+          <p>Check currently borrowed items and borrowers</p>
+        </button>
+        <button class="feature-card" id="admin-overdue-btn">
+          <div class="feature-icon orange"><i class="fas fa-exclamation-triangle"></i></div>
+          <h3>View Overdue Items</h3>
+          <p>See items past their return date</p>
+        </button>
+        <button class="feature-card" id="admin-history">
+          <div class="feature-icon purple"><i class="fas fa-history"></i></div>
+          <h3>Full History</h3>
+          <p>View complete borrowing and return records</p>
+        </button>
+        <button class="feature-card" id="admin-report">
+          <div class="feature-icon teal"><i class="fas fa-file-pdf"></i></div>
+          <h3>Generate Report</h3>
+          <p>Export inventory & loans as PDF</p>
+        </button>
+        <button class="feature-card" id="admin-users-btn">
+          <div class="feature-icon indigo"><i class="fas fa-users-cog"></i></div>
+          <h3>Manage Users</h3>
+          <p>View registered students and staff</p>
+        </button>
+      </div>
+
+      <div class="system-status">
+        <i class="fas fa-check-circle"></i> System running smoothly · All systems operational
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== ADMIN: MANAGE EQUIPMENT ========== -->
+  <div id="screen-admin-equipment" class="screen">
+    <div class="app-container">
+      <header class="app-header simple">
+        <button class="btn-icon back" id="eq-back"><i class="fas fa-arrow-left"></i></button>
+        <h2>Manage Equipment</h2>
+        <button class="btn-icon" id="btn-add-equipment"><i class="fas fa-plus"></i></button>
+      </header>
+      <div class="search-bar">
+        <i class="fas fa-search"></i>
+        <input type="text" id="admin-search-eq" placeholder="Search inventory..." />
+      </div>
+      <div id="admin-equipment-list" class="list-cards"></div>
+    </div>
+  </div>
+
+  <!-- ========== ADMIN: ACTIVE LOANS ========== -->
+  <div id="screen-admin-loans" class="screen">
+    <div class="app-container">
+      <header class="app-header simple">
+        <button class="btn-icon back" id="aloans-back"><i class="fas fa-arrow-left"></i></button>
+        <h2>Active Loans</h2>
+        <div style="width:40px"></div>
+      </header>
+      <div id="admin-loans-list" class="list-cards"></div>
+    </div>
+  </div>
+
+  <!-- ========== ADMIN: OVERDUE ========== -->
+  <div id="screen-admin-overdue" class="screen">
+    <div class="app-container">
+      <header class="app-header simple">
+        <button class="btn-icon back" id="aoverdue-back"><i class="fas fa-arrow-left"></i></button>
+        <h2>Overdue Items</h2>
+        <div style="width:40px"></div>
+      </header>
+      <div id="admin-overdue-list" class="list-cards"></div>
+    </div>
+  </div>
+
+  <!-- ========== ADMIN: HISTORY ========== -->
+  <div id="screen-admin-history" class="screen">
+    <div class="app-container">
+      <header class="app-header simple">
+        <button class="btn-icon back" id="ahistory-back"><i class="fas fa-arrow-left"></i></button>
+        <h2>Full History</h2>
+        <div style="width:40px"></div>
+      </header>
+      <div id="admin-history-list" class="list-cards"></div>
+    </div>
+  </div>
+
+  <!-- ========== ADMIN: USERS ========== -->
+  <div id="screen-admin-users" class="screen">
+    <div class="app-container">
+      <header class="app-header simple">
+        <button class="btn-icon back" id="ausers-back"><i class="fas fa-arrow-left"></i></button>
+        <h2>Manage Users</h2>
+        <div style="width:40px"></div>
+      </header>
+      <div id="admin-users-list" class="list-cards"></div>
+    </div>
+  </div>
+
+  <!-- ========== MODALS ========== -->
+  <div id="modal-overlay" class="modal-overlay">
+    <div class="modal" id="modal">
+      <div class="modal-header">
+        <h3 id="modal-title">Title</h3>
+        <button class="btn-icon" id="modal-close"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+      <div class="modal-footer" id="modal-footer"></div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
+
+  <!-- Config panel – Google Sheets is required -->
+  <div id="config-panel" class="config-panel">
+    <div class="config-header">
+      <h3><i class="fas fa-database"></i> Connect Google Sheets</h3>
+      <button class="btn-icon" id="config-close" title="Close"><i class="fas fa-times"></i></button>
+    </div>
+    <p class="config-mode">Status: <strong id="current-mode">Not connected</strong></p>
+    <p>This website uses <strong>Google Sheets</strong> as its permanent database. Deploy the Apps Script backend, then paste the Web App URL below.</p>
+    <input type="text" id="api-url" placeholder="https://script.google.com/macros/s/.../exec" />
+    <div class="config-actions">
+      <button class="btn btn-primary" id="save-api"><i class="fas fa-link"></i> Save & Connect</button>
+      <button class="btn btn-secondary" id="disconnect-api" type="button"><i class="fas fa-unlink"></i> Disconnect</button>
+    </div>
+    <p class="config-note">1. Create a Google Sheet → Extensions → Apps Script → paste <code>apps-script/Code.gs</code><br>
+    2. Deploy → Web app → Execute as Me → Anyone<br>
+    3. Paste the URL here. Inventory starts empty — add your own equipment as Admin.</p>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
